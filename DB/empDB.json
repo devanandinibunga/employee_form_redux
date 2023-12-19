@@ -2,7 +2,7 @@
   "employeeData": [
     {
       "empName": "Dileep Sai Vara Prasad Bhupathi",
-      "empDob": "30-05-1997",
+      "empDob": "14-12-2023",
       "empDesignation": "Software engineer",
       "empEmailId": "dbhupathi@msystechnologies.com",
       "empID": "2777",
@@ -17,12 +17,12 @@
       "id": 3
     },
     {
-      "empName": "Deva Nandini",
-      "empDob": "11-02-1997",
-      "empDesignation": "Software Developer",
-      "empEmailId": "dbunga@msystechnologies.com",
-      "empID": "2771",
-      "id": 4
+      "empName": "Varalakshmi Muliki",
+      "empDob": "30-05-1997",
+      "empDesignation": "Software developer",
+      "empEmailId": "vmuliki@msystechnologies.com",
+      "empID": "2760",
+      "id": 5
     }
   ]
 }

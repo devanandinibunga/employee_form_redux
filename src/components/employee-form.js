@@ -1,11 +1,11 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Button, DatePicker, Form, Input } from "antd";
 import { getEmployee, postEmployee, putEmployee } from "../server/server";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSubmitted, selectedKey } from "./employeeReducer";
+import moment from "moment";
 
-export function EmployeeForm() {
-  const [form] = Form.useForm();
+export function EmployeeForm({ form }) {
   const dispatch = useDispatch();
   const selectedActionKey = useSelector(
     (state) => state.employeeData.actionKey
@@ -13,19 +13,22 @@ export function EmployeeForm() {
   const selectedEmployeeData = useSelector(
     (state) => state.employeeData.employeeDetails
   );
+
+
   if (selectedActionKey === "edit") {
-    form.setFieldsValue({
-      empName: selectedEmployeeData[0].empName,
-      empDob: selectedEmployeeData[0].empDob,
-      empEmailId: selectedEmployeeData[0].empEmailId,
-      empID: selectedEmployeeData[0].empID,
-      empDesignation: selectedEmployeeData[0].empDesignation,
+    form?.setFieldsValue({
+      empName: selectedEmployeeData?.empName,
+      empDob: moment(selectedEmployeeData?.empDob, "DD-MM-YYYY"),
+      empEmailId: selectedEmployeeData?.empEmailId,
+      empID: selectedEmployeeData?.empID,
+      empDesignation: selectedEmployeeData?.empDesignation,
     });
   }
 
   const onFinish = (values) => {
+    values.empDob = values.empDob.format("DD-MM-YYYY");
     selectedActionKey === "edit"
-      ? putEmployee(selectedEmployeeData[0].id, values)
+      ? putEmployee(selectedEmployeeData.id, values)
           .then(() => {
             form.resetFields();
             dispatch(toggleSubmitted());
@@ -39,7 +42,10 @@ export function EmployeeForm() {
             const emailExists = response?.data.some(
               (employee) => employee.empEmailId === values.empEmailId
             );
-            if (!emailExists) {
+            const empIdExists = response?.data.some(
+              (employee) => employee.empID === values.empID
+            );
+            if (!emailExists && !empIdExists) {
               postEmployee(values)
                 .then(() => {
                   form.resetFields();
@@ -49,7 +55,11 @@ export function EmployeeForm() {
                   console.error("Error:", error);
                 });
             } else {
-              alert("Email already exists")
+              alert(
+                emailExists
+                  ? "Email already exists"
+                  : "Employee Id already exists"
+              );
             }
           })
           .catch((error) => {
@@ -58,6 +68,7 @@ export function EmployeeForm() {
   };
   const handleClear = () => {
     form.resetFields();
+    dispatch(selectedKey(""));
   };
   return (
     <Form form={form} onFinish={onFinish}>
@@ -81,7 +92,7 @@ export function EmployeeForm() {
           },
         ]}
       >
-        <Input />
+        <DatePicker format="DD-MM-YYYY" />
       </Form.Item>
       <Form.Item
         name="empDesignation"
@@ -116,14 +127,16 @@ export function EmployeeForm() {
       >
         <Input disabled={selectedActionKey === "edit"} />
       </Form.Item>
-      <Form.Item>
-        <Button htmlType="submit" type="primary">
-          {selectedActionKey === "edit" ? "Update" : "Submit"}
-        </Button>
-      </Form.Item>
-      <Form.Item>
-        <Button onClick={handleClear}>Clear</Button>
-      </Form.Item>
+      <div className="flex justify-around">
+        <Form.Item>
+          <Button htmlType="submit" className="bg-blue-500">
+            {selectedActionKey === "edit" ? "Update" : "Submit"}
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button onClick={handleClear}>Clear</Button>
+        </Form.Item>
+      </div>
     </Form>
   );
 }

@@ -3,6 +3,7 @@ import { Modal, Button } from "antd";
 import { deleteEmployee } from "../server/server";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSubmitted } from "./employeeReducer";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const DeletePopup = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -11,7 +12,7 @@ const DeletePopup = () => {
     (state) => state.employeeData.employeeDetails
   );
   const handleOk = () => {
-    deleteEmployee(selectedEmployeeData[0].id)
+    deleteEmployee(selectedEmployeeData.id)
       .then((response) => {
         dispatch(toggleSubmitted());
       })
@@ -33,9 +34,10 @@ const DeletePopup = () => {
         footer={false}
         closable={false}
       >
-        <div>
+        <div className="flex flex-col gap-y-5 items-center">
+          <RiDeleteBin6Fill  className="text-red-600 text-4xl"/>
           <h1>Are you sure you want to delete ?</h1>
-          <div>
+          <div className="flex gap-3">
             <Button onClick={handleCancel}>Cancel</Button>
             <Button onClick={handleOk}>Yes</Button>
           </div>

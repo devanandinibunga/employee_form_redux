@@ -3,15 +3,20 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { EmployeeDetails } from "./components/employee-details";
 import { EmployeeForm } from "./components/employee-form";
+import { Form } from "antd";
 
 function App() {
+  const [form] = Form.useForm();
   return (
-    <Provider store={store}>
-      <div className="flex">
-        <EmployeeForm />
-        <EmployeeDetails />
-      </div>
-    </Provider>
+    <div className="flex flex-col items-center min-h-full">
+      <div className="text-3xl font-bold underline">Employee Form</div>
+      <Provider store={store}>
+        <div className="flex flex-col lg:flex-row w-full justify-around items-center">
+          <EmployeeForm form={form} />
+          <EmployeeDetails form={form} />
+        </div>
+      </Provider>
+    </div>
   );
 }
 
