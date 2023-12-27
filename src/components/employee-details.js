@@ -105,32 +105,40 @@ export function EmployeeDetails({ form }) {
         dataSource={employeeDetails}
         className="hidden lg:block"
       />
-      {employeeDetails.map((item) => (
-        <Card key={item.id} className="block lg:hidden w-full">
-          <Row span={24} className="flex justify-between gap-y-3">
-            <Col span={15}>
-              <p className="manager-label truncate">{item.empName}</p>
-              <p className="user-name truncate">{item.empDesignation}</p>
-              <p className="email truncate">{item.empEmailId}</p>
-            </Col>
-            <Col span={8}>
-              <p className="user-name">{item.empDob}</p>
-              <p className="email">{item.empID}</p>
-            </Col>
-            <Col span={24} className="flex justify-around">
-              <Button
-                className="bg-orange-300"
-                onClick={() => handleEdit(item)}
-              >
-                Edit
-              </Button>
-              <Button className="bg-red-500" onClick={() => handleDelete(item)}>
-                Delete
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-      ))}
+      <div className="flex flex-col gap-y-3">
+        {employeeDetails.map((item) => (
+          <Card
+            key={item.id}
+            className="block lg:hidden w-full shadow-orange-400"
+          >
+            <Row span={24} className="flex justify-between gap-y-3">
+              <Col span={15}>
+                <p className="manager-label truncate">{item.empName}</p>
+                <p className="user-name truncate">{item.empDesignation}</p>
+                <p className="email truncate">{item.empEmailId}</p>
+              </Col>
+              <Col span={8}>
+                <p className="user-name">{item.empDob}</p>
+                <p className="email">{item.empID}</p>
+              </Col>
+              <Col span={24} className="flex justify-around">
+                <Button
+                  className="bg-orange-300"
+                  onClick={() => handleEdit(item)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  className="bg-red-500"
+                  onClick={() => handleDelete(item)}
+                >
+                  Delete
+                </Button>
+              </Col>
+            </Row>
+          </Card>
+        ))}
+      </div>
       {selectedActionKey === "delete" && <DeletePopup />}
       {selectedActionKey === "view" && <ViewDetails />}
     </>
